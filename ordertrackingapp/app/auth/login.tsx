@@ -14,16 +14,18 @@ import { useNavigation } from 'expo-router';
 import { ParamListBase } from '@react-navigation/native';
 
 import PasswordField from '@/components/SubComponents/PasswordField';
-// import { useToast } from '../../hooks/useToastNotification';
+import { useToast } from '@/hooks/useToastNotification';
 import { useLoader } from '@/hooks';
+import authService from '@/services/AuthService';
 
 
 export default function LoginScreen() {
     const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
     const [email, setEmail] = useState<{ value: string; error: string }>({ value: 'saad18910@hotmail.com', error: '' });
     const [password, setPassword] = useState<{ value: string; error: string }>({ value: 's', error: '' });
+    const emptyLoginInfo = { email: '', password: '' };
 
-    // const { showSuccessMessage, showErrorMessage } = useToast();
+    const { showSuccessMessage, showErrorMessage } = useToast();
 
     const { setLoading } = useLoader();
 
@@ -40,18 +42,17 @@ export default function LoginScreen() {
     };
 
     const handleLogin = async () => {
-        console.log({ email, password })
+
         try {
             Keyboard.dismiss();
             setLoading(true);
-            // const isValidUser = await authService.loginUser(loginInfo);
+            const isValidUser = await authService.loginUser({ email: email.value, password: password.value });
 
-            // if (isValidUser) {
-            //     rememberUserCredentials({ loginInfo: rememberMe ? loginInfo : emptyLoginInfo, rememberMe });
-            onSuccessfulLogin(email.value);
-            // }
+            if (isValidUser) {
+                onSuccessfulLogin(email.value);
+            }
         } catch (error) {
-            //   showErrorMessage((error as Error).message); // Custom messages for Sanitization check
+            showErrorMessage((error as Error).message);
         } finally {
             setLoading(false);
         }
@@ -64,11 +65,11 @@ export default function LoginScreen() {
         });
 
         navigation.navigate(ROUTE_NAMES.TABS.self);
-        // showSuccessMessage(`Logged In as ${email}`, {
-        //     textStyle: {
-        //         fontSize: 14
-        //     }
-        // });
+        showSuccessMessage(`Logged In as ${email}`, {
+            textStyle: {
+                fontSize: 14
+            }
+        });
 
     };
     return (
@@ -99,8 +100,7 @@ export default function LoginScreen() {
                 placeholder="Password"
                 value={password.value}
                 onChangeText={(text: any) => setPassword({ value: text, error: '' })}
-                onSubmitEditing={onLoginPressed}
-            />
+                onSubmitEditing={onLoginPressed} label={''} />
 
             <Button style={styles.button} mode="contained" onPress={onLoginPressed}>
                 Login

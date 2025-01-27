@@ -5,9 +5,11 @@ import TextInput from '@/components/SubComponents/TextInput';
 type Props = TextInputProps & {
     value: string;
     onChangeText: (text: string) => void;
+    label: string;
+    placeholder: string;
 }
 
-const PasswordField = (({ value, onChangeText, onSubmitEditing }: Props) => {
+const PasswordField = (({ value, onChangeText, onSubmitEditing, label = "Password", placeholder = "Password" }: Props) => {
     const [showPassword, setShowPassword] = useState(false);
 
     const toggleShowPassword = () => {
@@ -17,8 +19,8 @@ const PasswordField = (({ value, onChangeText, onSubmitEditing }: Props) => {
     return (
         <View style={styles.passwordContainer}>
             <TextInput
-                label="Password"
-                placeholder="Password"
+                label={label}
+                placeholder={placeholder}
                 value={value}
                 onChangeText={onChangeText}
                 secureTextEntry={!showPassword}

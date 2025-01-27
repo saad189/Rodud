@@ -7,11 +7,14 @@ import TextInput from '@/components/SubComponents/TextInput';
 import { ROUTE_NAMES } from '@/constants';
 import { theme } from '@/core';
 import { emailValidator, nameValidator, passwordValidator } from '@/helpers';
+import { useLoader, useToast } from '@/hooks';
+
+import userService from '@/services/UserService';
 import { ParamListBase } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from 'expo-router';
 import React, { useState } from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Keyboard } from 'react-native';
 import { Text } from 'react-native-paper';
 
 type Props = {
@@ -23,8 +26,13 @@ export default function RegisterScreen() {
     const [name, setName] = useState<{ value: string; error: string }>({ value: '', error: '' });
     const [email, setEmail] = useState<{ value: string; error: string }>({ value: '', error: '' });
     const [password, setPassword] = useState<{ value: string; error: string }>({ value: '', error: '' });
+    const [repeatedPassword, setRepeatedPassword] = useState<{ value: string; error: string }>({ value: '', error: '' });
 
-    const onSignUpPressed = () => {
+
+    // manage repeat password as well
+    const { showSuccessMessage, showErrorMessage } = useToast();
+    const { setLoading } = useLoader();
+    const onSignUpPressed = async () => {
         const nameError = nameValidator(name.value);
         const emailError = emailValidator(email.value);
         const passwordError = passwordValidator(password.value);
@@ -32,10 +40,28 @@ export default function RegisterScreen() {
             setName({ ...name, error: nameError });
             setEmail({ ...email, error: emailError });
             setPassword({ ...password, error: passwordError });
+            setRepeatedPassword({ ...repeatedPassword, error: passwordError });
             return;
         }
-        // We will add auth update here
-        navigation.navigate(ROUTE_NAMES.AUTH.LOGIN);
+
+        try {
+            const signupInfo = {
+                email: email.value, password: password.value,
+                name: name.value.trim(),
+                repeatedPassword: repeatedPassword.value
+            };
+            Keyboard.dismiss();
+            setLoading(true);
+            const isSignUpSuccessful = await userService.signupUser(signupInfo);
+            if (isSignUpSuccessful) {
+                showSuccessMessage('Account created successfully!');
+                navigation.navigate(ROUTE_NAMES.AUTH.LOGIN);
+            }
+        } catch (error: any) {
+            showErrorMessage(error.message);
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -66,8 +92,13 @@ export default function RegisterScreen() {
                 placeholder="Password"
                 value={password.value}
                 onChangeText={(text: any) => setPassword({ value: text, error: '' })}
-                onSubmitEditing={onSignUpPressed}
-            />
+                onSubmitEditing={onSignUpPressed} label='Password' />
+
+            <PasswordField
+                placeholder="Repeat Password"
+                value={repeatedPassword.value}
+                onChangeText={(text: any) => setRepeatedPassword({ value: text, error: '' })}
+                onSubmitEditing={onSignUpPressed} label='Repeat Password' />
             <Button mode="contained" onPress={onSignUpPressed} style={styles.button}>
                 Sign Up
             </Button>
