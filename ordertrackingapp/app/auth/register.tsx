@@ -42,7 +42,7 @@ export default function RegisterScreen() {
         <Background>
             {/* <BackButton goBack={navigation.goBack} /> */}
             <Logo isWhite={true} />
-            <Text style={styles.titleText}>Welcome back!</Text>
+            <Text style={styles.titleText}>Hello!</Text>
             <TextInput
                 label="Name"
                 returnKeyType="next"

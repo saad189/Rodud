@@ -1,6 +1,7 @@
 import { theme } from '@/core';
 import React, { ReactNode } from 'react';
-import { ImageBackground, StyleSheet, KeyboardAvoidingView, ViewStyle } from 'react-native';
+import { ImageBackground, StyleSheet, ViewStyle } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 type Props = {
     children: ReactNode;
@@ -14,9 +15,9 @@ export default function Background({ children, style }: Props) {
             resizeMode="cover"
             style={styles.background}
         >
-            <KeyboardAvoidingView style={[style ? style : styles.container]} behavior="padding">
+            <SafeAreaView style={[style ? style : styles.container]} >
                 {children}
-            </KeyboardAvoidingView>
+            </SafeAreaView>
         </ImageBackground>
     );
 }

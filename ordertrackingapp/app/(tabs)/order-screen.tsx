@@ -1,141 +1,202 @@
 import React, { useState } from 'react';
 import {
-    View,
     Text,
     TextInput,
     TouchableOpacity,
     StyleSheet,
     Alert,
-    Platform
+    Platform, ScrollView,
+    KeyboardAvoidingView
 } from 'react-native';
-
+import DropDownPicker from 'react-native-dropdown-picker';
 import { ParamListBase, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import DateTimePicker from '@react-native-community/datetimepicker';
-
 import { formatDateToDDMMYYYY } from '@/helpers';
+import { CreateOrderModel } from '@/models';
+import { PackageSize } from '@/constants';
+import { capitalizeFirstLetter, getEnumValues } from '@/helpers';
+import orderService from '@/services/OrderService';
+import { useLoader } from '@/hooks';
 
 
-const AddDeed: React.FC = () => {
+const AddOrder: React.FC = () => {
     const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
+    const [open, setOpen] = useState(false);
+    const [value, setValue] = useState<any>([]);
+    const [items, setItems] = useState(
+        getEnumValues(PackageSize).map(option => ({ label: capitalizeFirstLetter(option), value: (option) })));
 
-    const [task, setTask] = useState({
-        name: '',
-        date: null as Date | null,
-        showDatePicker: false,
-        score: '',
-        detail: ''
-    });
+    const defaultRequest = {
+        pickupLocation: '',
+        shippingLocation: '',
+        pickupDate: new Date(),
+        deliveryDate: new Date(),
+        comments: '',
+        size: PackageSize.Small,
+        weight: 0,
+    }
+    const [orderRequest, setOrderRequest] = useState<CreateOrderModel>(defaultRequest);
 
-    // Update functions
-    const setName = (name: string) => setTask(prev => ({ ...prev, name }));
-    const setDate = (date: Date | null) => setTask(prev => ({ ...prev, date }));
-    const setShowDatePicker = (show: boolean) => setTask(prev => ({ ...prev, showDatePicker: show }));
-    const setScore = (score: string) => setTask(prev => ({ ...prev, score }));
-    const setDetail = (detail: string) => setTask(prev => ({ ...prev, detail }));
+    const { setLoading } = useLoader();
+
+    const setPickupLocation = (value: string) => setOrderRequest(prev => ({ ...prev, pickupLocation: value }));
+    const setShippingLocation = (value: string) => setOrderRequest(prev => ({ ...prev, shippingLocation: value }));
+    const setPickupDate = (date: Date | null) => setOrderRequest(prev => ({ ...prev, pickupDate: date || new Date() }));
+    const setDeliveryDate = (date: Date | null) => setOrderRequest(prev => ({ ...prev, deliveryDate: date || new Date() }));
+    const setComments = (value: string) => setOrderRequest(prev => ({ ...prev, comments: value }));
+    const setWeight = (value: string) => setOrderRequest(prev => ({ ...prev, weight: parseFloat(value) || 0 }));
+
+    const [showPickupDatePicker, setShowPickupDatePicker] = useState(false);
+    const [showDeliveryDatePicker, setShowDeliveryDatePicker] = useState(false);
 
     const handleSave = async () => {
-        if (!task.name.trim()) {
-            Alert.alert('Validation Error', 'Deed Name cannot be empty.');
+        if (!orderRequest.pickupLocation.trim() || !orderRequest.shippingLocation.trim()) {
+            Alert.alert('Validation Error', 'Pickup and shipping locations are required.');
             return;
         }
 
-        if (!task.date) {
-            Alert.alert('Validation Error', 'Please select a valid date.');
+        if (orderRequest.weight <= 0) {
+            Alert.alert('Validation Error', 'Weight must be greater than 0.');
             return;
         }
 
-        if (!task.score) {
-            Alert.alert('Validation Error', 'Please enter a score (1-5).');
-            return;
+        setLoading(true);
+        try {
+            await orderService.addOrder(orderRequest);
+            setOrderRequest(defaultRequest);
+            navigation.goBack();
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false);
         }
-
-        const parsedScore = parseInt(task.score, 10);
-        if (isNaN(parsedScore) || parsedScore < 1 || parsedScore > 5) {
-            Alert.alert('Validation Error', 'Score must be a number between 1 and 5.');
-            return;
-        }
-
-        // await deedsOldService.saveUserDeed({
-        //     id: Date.now().toString(),
-        //     name: task.name,
-        //     deadline: task.date,
-        //     score: parsedScore,
-        //     detail: task.detail,
-        //     category: DeedCategory.HAQOOQ_ALLAH
-        // });
-
-        navigation.goBack();
     };
 
-    const onChangeDate = (event: any, selectedDate?: Date) => {
-        setShowDatePicker(false);
+    const onChangePickupDate = (event: any, selectedDate?: Date) => {
+        setShowPickupDatePicker(false);
         if (selectedDate) {
-            setDate(selectedDate);
+            setPickupDate(selectedDate);
+        }
+    };
+
+    const onChangeDeliveryDate = (event: any, selectedDate?: Date) => {
+        setShowDeliveryDatePicker(false);
+        if (selectedDate) {
+            setDeliveryDate(selectedDate);
         }
     };
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.header}>Add a Good Deed</Text>
+        <ScrollView>
+            <KeyboardAvoidingView
+                style={styles.container}
+                behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+                keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
+            >
 
-            <Text style={styles.label}>Deed Name *</Text>
-            <TextInput
-                style={styles.input}
-                placeholder="e.g. Buy groceries"
-                value={task.name}
-                onChangeText={setName}
-            />
+                <Text style={styles.header}>Create a Truck Request</Text>
 
-            <Text style={styles.label}>Deadline (DD-MM-YYYY) *</Text>
-            <TouchableOpacity onPress={() => setShowDatePicker(true)} style={styles.datePickerButton}>
-                <Text style={styles.datePickerText}>
-                    {task.date ? formatDateToDDMMYYYY(task.date) : 'Select Date'}
-                </Text>
-            </TouchableOpacity>
-
-            {task.showDatePicker && (
-                <DateTimePicker
-                    mode="date"
-                    display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-                    value={task.date || new Date()}
-                    onChange={onChangeDate}
-                    minimumDate={new Date()}
+                <Text style={styles.label}>Pickup Location</Text>
+                <TextInput
+                    style={styles.input}
+                    placeholder="Enter pickup location"
+                    value={orderRequest.pickupLocation}
+                    onChangeText={setPickupLocation}
                 />
-            )}
 
-            <Text style={styles.label}>Score (1-5) *</Text>
-            <TextInput
-                style={styles.input}
-                placeholder="e.g. 5"
-                keyboardType="numeric"
-                value={task.score}
-                onChangeText={setScore}
-            />
+                <Text style={styles.label}>Shipping Location</Text>
+                <TextInput
+                    style={styles.input}
+                    placeholder="Enter shipping location"
+                    value={orderRequest.shippingLocation}
+                    onChangeText={setShippingLocation}
+                />
 
-            <Text style={styles.label}>Detail (optional)</Text>
-            <TextInput
-                style={[styles.input, { height: 80 }]}
-                placeholder="Additional details..."
-                value={task.detail}
-                onChangeText={setDetail}
-                multiline={true}
-            />
+                <Text style={styles.label}>Pickup Date</Text>
+                <TouchableOpacity onPress={() => setShowPickupDatePicker(true)} style={styles.datePickerButton}>
+                    <Text style={styles.datePickerText}>
+                        {formatDateToDDMMYYYY(orderRequest.pickupDate)}
+                    </Text>
+                </TouchableOpacity>
 
-            <TouchableOpacity onPress={handleSave} style={styles.saveButton}>
-                <Text style={styles.saveButtonText}>Save Deed</Text>
-            </TouchableOpacity>
-        </View>
+                {showPickupDatePicker && (
+                    <DateTimePicker
+                        mode="date"
+                        display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+                        value={orderRequest.pickupDate}
+                        onChange={onChangePickupDate}
+                        minimumDate={new Date()}
+                    />
+                )}
+
+                <Text style={styles.label}>Delivery Date</Text>
+                <TouchableOpacity onPress={() => setShowDeliveryDatePicker(true)} style={styles.datePickerButton}>
+                    <Text style={styles.datePickerText}>
+                        {formatDateToDDMMYYYY(orderRequest.deliveryDate)}
+                    </Text>
+                </TouchableOpacity>
+
+                {showDeliveryDatePicker && (
+                    <DateTimePicker
+                        mode="date"
+                        display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+                        value={orderRequest.deliveryDate}
+                        onChange={onChangeDeliveryDate}
+                        minimumDate={orderRequest.pickupDate}
+                    />
+                )}
+
+                <Text style={styles.label}>Size</Text>
+                <DropDownPicker
+                    open={open}
+                    value={value}
+                    items={items}
+                    setOpen={setOpen}
+                    setValue={setValue}
+                    setItems={setItems}
+                    theme="LIGHT"
+                    multiple={false}
+                    mode="BADGE"
+                    placeholder='Choose Shipping Size'
+                    style={[styles.input, { marginBottom: 20 }]}
+                />
+
+                <Text style={styles.label}>Weight (kg)</Text>
+                <TextInput
+                    style={styles.input}
+                    placeholder="Enter weight"
+                    keyboardType="numeric"
+                    value={orderRequest.weight.toString()}
+                    onChangeText={setWeight}
+                />
+
+                <Text style={styles.label}>Comments (optional)</Text>
+                <TextInput
+                    style={[styles.input, { height: 80 }]}
+                    placeholder="Additional comments..."
+                    value={orderRequest.comments}
+                    onChangeText={setComments}
+                    multiline={true}
+                />
+
+                <TouchableOpacity onPress={handleSave} style={styles.saveButton}>
+                    <Text style={styles.saveButtonText}>Create Request</Text>
+                </TouchableOpacity>
+
+            </KeyboardAvoidingView>
+        </ScrollView >
     );
 };
 
-export default AddDeed;
+export default AddOrder;
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#FFF7E9', // Light pastel background
         padding: 20,
+
     },
     header: {
         fontSize: 24,

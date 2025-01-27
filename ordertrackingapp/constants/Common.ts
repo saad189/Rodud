@@ -4,3 +4,10 @@ export enum OrderStatus {
     Delivered = 'Delivered',
     Cancelled = 'Cancelled'
 }
+
+export enum PackageSize {
+    Small = 'Small',
+    Medium = 'Medium',
+    Large = 'Large',
+    ExtraLarge = 'Extra Large'
+}

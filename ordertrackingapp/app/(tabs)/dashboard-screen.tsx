@@ -32,7 +32,7 @@ const OrderDashboardScreen = () => {
         setCurrentDate(formattedDate);
 
         // Calculate completed orders
-        const completed = orders.filter((order) => order.status === OrderStatus.Delivered).length;
+        const completed = orders.filter((order) => order.status == OrderStatus.Delivered).length;
         setCompletedorders(completed);
     }, []);
 
@@ -86,12 +86,12 @@ const OrderDashboardScreen = () => {
 
                         <View style={styles.row}>
                             <Text style={styles.label}>Pickup:</Text>
-                            <Text style={styles.value}>{formatDateToDDMMYYYY(item.pickupTime)}</Text>
+                            <Text style={styles.value}>{formatDateToDDMMYYYY(item.pickupDate)}</Text>
                         </View>
 
                         <View style={styles.row}>
                             <Text style={styles.label}>Delivery:</Text>
-                            <Text style={styles.value}>{formatDateToDDMMYYYY(item.deliveryTime)}</Text>
+                            <Text style={styles.value}>{formatDateToDDMMYYYY(item.deliveryDate)}</Text>
                         </View>
                     </TouchableOpacity>
                 )}

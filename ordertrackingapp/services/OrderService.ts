@@ -1,24 +1,32 @@
-import { OrderModel } from "@/models";
+import { CreateOrderModel, OrderModel } from "@/models";
 import ApiService from "./api.service";
 import { formatErrorMessage } from "@/helpers";
-import { OrderStatus } from "@/constants";
+import { OrderStatus, PackageSize } from "@/constants";
 
 const orders: OrderModel[] = [
     {
-        orderNumber: 'ORD12345', status: OrderStatus.Pending, pickupLocation: 'NYC', shippingAddress: 'LA', deliveryTime: new Date('2023-10-01'),
-        pickupTime: new Date('2023-9-01')
+        orderNumber: 'ORD12345', status: OrderStatus.Pending, pickupLocation: 'NYC', shippingLocation: 'LA', deliveryDate: new Date('2023-10-01'),
+        pickupDate: new Date('2023-9-01'),
+        size: PackageSize.Small,
+        weight: 0
     },
     {
-        orderNumber: 'ORD12346', status: OrderStatus.InProgress, pickupLocation: 'Chicago', shippingAddress: 'Houston', deliveryTime: new Date('2023-10-02'),
-        pickupTime: new Date('2023-10-01')
+        orderNumber: 'ORD12346', status: OrderStatus.InProgress, pickupLocation: 'Chicago', shippingLocation: 'Houston', deliveryDate: new Date('2023-10-02'),
+        pickupDate: new Date('2023-10-01'),
+        size: PackageSize.Medium,
+        weight: 0
     },
     {
-        orderNumber: 'ORD12347', status: OrderStatus.Delivered, pickupLocation: 'Chicago', shippingAddress: 'Houston', deliveryTime: new Date('2023-10-03'),
-        pickupTime: new Date('2023-10-02')
+        orderNumber: 'ORD12347', status: OrderStatus.Delivered, pickupLocation: 'Chicago', shippingLocation: 'Houston', deliveryDate: new Date('2023-10-03'),
+        pickupDate: new Date('2023-10-02'),
+        size: PackageSize.Large,
+        weight: 0
     },
     {
-        orderNumber: 'ORD12348', status: OrderStatus.Cancelled, pickupLocation: 'Chicago', shippingAddress: 'Houston', deliveryTime: new Date('2023-10-04'),
-        pickupTime: new Date('2023-10-03')
+        orderNumber: 'ORD12348', status: OrderStatus.Cancelled, pickupLocation: 'Chicago', shippingLocation: 'Houston', deliveryDate: new Date('2023-10-04'),
+        pickupDate: new Date('2023-10-03'),
+        size: PackageSize.ExtraLarge,
+        weight: 0
     },
 ];
 
@@ -41,9 +49,10 @@ class OrderService {
     }
 
     // Add a new order
-    async addOrder(order: OrderModel): Promise<boolean> {
+    async addOrder(order: CreateOrderModel): Promise<boolean> {
         try {
-            await this.apiService.post(`${this.endpoint}`, order);
+            console.log({ order })
+            //     await this.apiService.post(`${this.endpoint}`, order);
             return true;
         } catch (error: any) {
             throw new Error(formatErrorMessage(error));
