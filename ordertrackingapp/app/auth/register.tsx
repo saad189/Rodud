@@ -1,7 +1,6 @@
-import BackButton from '@/components/SubComponents/BackButton';
+
 import Background from '@/components/SubComponents/Background';
 import Button from '@/components/SubComponents/Button';
-import Header from '@/components/SubComponents/Header';
 import Logo from '@/components/SubComponents/Logo';
 import PasswordField from '@/components/SubComponents/PasswordField';
 import TextInput from '@/components/SubComponents/TextInput';
@@ -43,7 +42,7 @@ export default function RegisterScreen() {
         <Background>
             {/* <BackButton goBack={navigation.goBack} /> */}
             <Logo isWhite={true} />
-            <Header>Create Account</Header>
+            <Text style={styles.titleText}>Welcome back!</Text>
             <TextInput
                 label="Name"
                 returnKeyType="next"
@@ -87,6 +86,10 @@ const styles = StyleSheet.create({
     button: {
         width: '100%',
         marginTop: 24
+    },
+    titleText: {
+        fontSize: 24,
+        fontWeight: "600"
     },
     row: {
         flexDirection: 'row',

@@ -3,6 +3,8 @@ export const ROUTE_NAMES = {
     HOME_SCREEN: 'home-screen',
     TABS: {
         self: '(tabs)',
+        DASHBOARD_SCREEN: 'dashboard-screen',
+        ORDER_SCREEN: 'order-screen',
     },
 
     AUTH: {

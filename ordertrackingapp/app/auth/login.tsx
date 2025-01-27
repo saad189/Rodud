@@ -60,10 +60,10 @@ export default function LoginScreen() {
     const onSuccessfulLogin = (email: string) => {
         navigation.reset({
             index: 0,
-            routes: [{ name: ROUTE_NAMES.HOME_SCREEN }],
+            routes: [{ name: ROUTE_NAMES.TABS.self }],
         });
 
-        navigation.navigate(ROUTE_NAMES.HOME_SCREEN);
+        navigation.navigate(ROUTE_NAMES.TABS.self);
         // showSuccessMessage(`Logged In as ${email}`, {
         //     textStyle: {
         //         fontSize: 14
@@ -101,11 +101,7 @@ export default function LoginScreen() {
                 onChangeText={(text: any) => setPassword({ value: text, error: '' })}
                 onSubmitEditing={onLoginPressed}
             />
-            <View style={styles.forgotPassword}>
-                <TouchableOpacity onPress={() => navigation.navigate(ROUTE_NAMES.AUTH.RESET_PASSWORD)}>
-                    <Text style={styles.forgot}>Forgot your password?</Text>
-                </TouchableOpacity>
-            </View>
+
             <Button style={styles.button} mode="contained" onPress={onLoginPressed}>
                 Login
             </Button>
@@ -137,10 +133,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginTop: 4,
     },
-    forgot: {
-        fontSize: 13,
-        color: theme.colors.secondary,
-    },
+
     link: {
         fontWeight: 'bold',
         color: theme.colors.secondary,
