@@ -1,8 +1,7 @@
 import { OrderStatus } from "@/constants";
 
 export interface OrderModel {
-    id: number;
-    userId: number;
+    orderNumber: string;
     pickupLocation: string;
     shippingAddress: string;
     pickupTime: Date;

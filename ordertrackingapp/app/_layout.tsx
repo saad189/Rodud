@@ -7,8 +7,9 @@ import { useEffect } from 'react';
 import 'react-native-reanimated';
 import { RootSiblingParent } from 'react-native-root-siblings';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import { ROUTE_NAMES } from '@/constants/Routes';
+
 import { LoaderProvider } from '@/hooks';
+import { ROUTE_NAMES } from '@/constants';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -29,6 +30,15 @@ function Stacks() {
       />
       <Stack.Screen
         name={ROUTE_NAMES.AUTH.LOGIN}
+        options={{
+          headerShown: false,
+          presentation: 'modal',
+          animationTypeForReplace: 'push',
+          animation: 'slide_from_left'
+        }}
+      />
+      <Stack.Screen
+        name='index'
         options={{
           headerShown: false,
           presentation: 'modal',

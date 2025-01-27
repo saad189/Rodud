@@ -9,7 +9,7 @@ import Logo from '@/components/SubComponents/Logo';
 import TextInput from '@/components/SubComponents/TextInput';
 import Button from '@/components/SubComponents/Button';
 import { theme } from '@/core';
-import { ROUTE_NAMES } from '@/constants/Routes';
+import { ROUTE_NAMES } from '@/constants';
 import { useNavigation } from 'expo-router';
 import { ParamListBase } from '@react-navigation/native';
 

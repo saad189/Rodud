@@ -4,7 +4,7 @@ import Button from '@/components/SubComponents/Button';
 import Logo from '@/components/SubComponents/Logo';
 import PasswordField from '@/components/SubComponents/PasswordField';
 import TextInput from '@/components/SubComponents/TextInput';
-import { ROUTE_NAMES } from '@/constants/Routes';
+import { ROUTE_NAMES } from '@/constants';
 import { theme } from '@/core';
 import { emailValidator, nameValidator, passwordValidator } from '@/helpers';
 import { ParamListBase } from '@react-navigation/native';
