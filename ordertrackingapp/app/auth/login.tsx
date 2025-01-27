@@ -87,15 +87,6 @@ export default function LoginScreen() {
                 textContentType="emailAddress"
                 keyboardType="email-address"
             />
-            {/* <TextInput
-                label="Password"
-                returnKeyType="done"
-                value={password.value}
-                onChangeText={(text: any) => setPassword({ value: text, error: '' })}
-                error={!!password.error}
-                errorText={password.error}
-                secureTextEntry
-            /> */}
             <PasswordField
                 placeholder="Password"
                 value={password.value}

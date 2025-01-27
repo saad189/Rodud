@@ -17,7 +17,7 @@ import { CreateOrderModel } from '@/models';
 import { PackageSize } from '@/constants';
 import { capitalizeFirstLetter, getEnumValues } from '@/helpers';
 import orderService from '@/services/OrderService';
-import { useLoader } from '@/hooks';
+import { useLoader, useToast } from '@/hooks';
 
 
 const AddOrder: React.FC = () => {
@@ -39,6 +39,7 @@ const AddOrder: React.FC = () => {
     const [orderRequest, setOrderRequest] = useState<CreateOrderModel>(defaultRequest);
 
     const { setLoading } = useLoader();
+    const { showSuccessMessage, showErrorMessage } = useToast();
 
     const setPickupLocation = (value: string) => setOrderRequest(prev => ({ ...prev, pickupLocation: value }));
     const setShippingLocation = (value: string) => setOrderRequest(prev => ({ ...prev, shippingLocation: value }));
@@ -65,9 +66,10 @@ const AddOrder: React.FC = () => {
         try {
             await orderService.addOrder(orderRequest);
             setOrderRequest(defaultRequest);
+            showSuccessMessage('Order request created successfully!');
             navigation.goBack();
         } catch (error) {
-            console.error(error);
+            showErrorMessage((error as Error).message);
         } finally {
             setLoading(false);
         }

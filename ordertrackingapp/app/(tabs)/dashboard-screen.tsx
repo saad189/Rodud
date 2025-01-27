@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, FlatList } from 'react-native';
 import { OrderStatus } from '@/constants';
 import { useFocusEffect } from 'expo-router';
-import { useLoader } from '@/hooks';
+import { useLoader, useToast } from '@/hooks';
 import orderService from '@/services/OrderService';
 import { OrderModel } from '@/models';
 import { formatDateToDDMMYYYY } from '@/helpers';
@@ -19,7 +19,8 @@ const OrderDashboardScreen = () => {
     const [currentDate, setCurrentDate] = useState<string>('');
     const [orders, setOrders] = useState<OrderModel[]>([]);
     const [completedorders, setCompletedorders] = useState<number>(0);
-    const { isLoading, setLoading } = useLoader();
+    const { setLoading } = useLoader();
+    const { showErrorMessage } = useToast();
 
     useEffect(() => {
         const today = new Date();
@@ -44,7 +45,7 @@ const OrderDashboardScreen = () => {
                     const orders = await orderService.getAllUserOrders();
                     setOrders(orders);
                 } catch (error) {
-                    console.error(error);
+                    showErrorMessage((error as Error).message);
                 } finally {
                     setLoading(false);
                 }
