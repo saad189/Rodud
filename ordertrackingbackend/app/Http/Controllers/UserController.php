@@ -26,7 +26,7 @@ class UserController extends Controller
             ], 401);
         }
 
-        $token = $user->createToken('auth_token')->plainTextToken;
+        $token = $user->createToken('auth_token')->accessToken;
 
         return response()->json([
             'token' => $token,
@@ -51,9 +51,15 @@ class UserController extends Controller
             'password' => Hash::make($validatedData['password']),
         ]);
 
-        $token = $user->createToken('auth_token')->plainTextToken;
+        $token = $user->createToken('auth_token')->accessToken;
 
         return response()->json(['success' => true, 'user' => $user], 201);
+    }
+
+    public function logout(Request $request)
+    {
+        $request->user()->token()->revoke();
+        return response()->json(['message' => 'Successfully logged out']);
     }
 
     /**

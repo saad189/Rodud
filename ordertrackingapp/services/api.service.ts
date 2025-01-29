@@ -10,7 +10,7 @@ const apiClient = axios.create({
     baseURL: BASE_URL,
     timeout: 10000,
     withCredentials: true,
-    withXSRFToken: true,
+    //  withXSRFToken: true,
 });
 
 // Request interceptor to add the Authorization header

@@ -3,27 +3,27 @@
 namespace App\Http\Controllers;
 
 use App\Models\ShippingOrder;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class AdminController extends Controller
 {
     public function index()
     {
-        return view('admin_login');
+        // This could redirect to the login form or handle an admin "home" page
+        return redirect()->route('admin.loginForm');
     }
 
     public function dashboard()
     {
-
         Log::info('Admin dashboard accessed');
-        $orders =  $orders = ShippingOrder::with('user')->get();
+        $orders = ShippingOrder::with('user')->get();
         $notifications = [
             ['message' => 'Order #123 has been updated.'],
             ['message' => '3 new users registered today.'],
             ['message' => 'Server backup completed.'],
         ];
+
         return view('admin_dashboard', compact('orders', 'notifications'));
     }
 

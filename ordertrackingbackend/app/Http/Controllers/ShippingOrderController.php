@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\ShippingOrder;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class ShippingOrderController extends Controller
 {
@@ -34,7 +33,6 @@ class ShippingOrderController extends Controller
      */
     public function addOrder(Request $request)
     {
-        Log::info('Received order request with body: ', $request->all());
 
         $validatedData = $request->validate([
             'pickup_location' => 'required|string',
