@@ -13,6 +13,7 @@ class AuthService {
 
     async loginUser(authInfo: LoginInfo) {
         try {
+            await this.apiService.get('/sanctum/csrf-cookie');
             const { data } = await this.apiService.post<AuthModel>(`${this.endpoint}/login`, authInfo);
             const { token, user } = data;
 

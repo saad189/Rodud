@@ -34,15 +34,15 @@ class OrderService {
     private endpoint: string;
 
     constructor(private readonly apiService: ApiService) {
-        this.endpoint = '/orders';
+        this.endpoint = '/shipping-orders';
     }
 
     // Get all orders for a user
     async getAllUserOrders(): Promise<OrderModel[]> {
         try {
-            // const { data } = await this.apiService.get<OrderModel[]>(`${this.endpoint}/user`);
-            //  return data;
-            return orders;
+            const { data } = await this.apiService.get<OrderModel[]>(`${this.endpoint}/user`);
+            return data;
+            // return orders;
         } catch (error: any) {
             throw new Error(formatErrorMessage(error));
         }

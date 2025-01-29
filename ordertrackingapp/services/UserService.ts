@@ -11,7 +11,7 @@ class UserService {
 
     async signupUser(signupInfo: SignUpInfo) {
         try {
-            await this.apiService.post(`${this.endpoint}/signup`, signupInfo);
+            await this.apiService.post(`${this.endpoint}/signup`, { ...signupInfo, password_confirmation: signupInfo.repeatedPassword });
             return true;
         }
         catch (error: any) {
