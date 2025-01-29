@@ -1,11 +1,9 @@
 import React, { useState, useEffect, } from 'react';
 import { ScrollView, StyleSheet, Dimensions } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import { LoginScreen } from './auth';
 
 
 export default function Index() {
-    const navigation = useNavigation();
     const [_, setIsLandScapeMode] = useState(Dimensions.get('window').width >= Dimensions.get('window').height);
     useEffect(() => {
         const updateMode = () => {

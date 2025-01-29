@@ -65,11 +65,7 @@ export default function LoginScreen() {
         });
 
         navigation.navigate(ROUTE_NAMES.TABS.self);
-        showSuccessMessage(`Logged In as ${email}`, {
-            textStyle: {
-                fontSize: 14
-            }
-        });
+        showSuccessMessage(`Logged In as ${email}`);
 
     };
     return (

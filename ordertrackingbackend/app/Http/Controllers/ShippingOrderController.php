@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ShippingOrder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ShippingOrderController extends Controller
 {
@@ -17,7 +18,6 @@ class ShippingOrderController extends Controller
 
         return response()->json($orders, 200);
     }
-    
     /**
      * Get all orders for a specific user.
      */
@@ -34,21 +34,33 @@ class ShippingOrderController extends Controller
      */
     public function addOrder(Request $request)
     {
+        Log::info('Received order request with body: ', $request->all());
+
         $validatedData = $request->validate([
-            'order_number' => 'required|string|unique:shipping_orders,order_number',
             'pickup_location' => 'required|string',
             'shipping_location' => 'required|string',
             'pickup_date' => 'required|date',
             'delivery_date' => 'required|date|after_or_equal:pickup_date',
-            'status' => 'required|in:In Progress,Cancelled,Delivered,Pending',
             'size' => 'required|in:Small,Medium,Large,Extra Large',
             'weight' => 'required|numeric',
         ]);
 
-        $order = ShippingOrder::create(array_merge($validatedData, ['user_id' => $request->user()->id]));
+        $userId = $request->user()->id;
+
+        // Create the order first (order_number is NULL for now)
+        $order = ShippingOrder::create(array_merge($validatedData, [
+            'user_id' => $userId,
+            'status' => 'Pending', // Default status
+        ]));
+
+        // Generate and update order_number based on user_id and order_id
+        $order->order_number = "u{$userId}o{$order->id}";
+        $order->save(); // Save the updated order_number
 
         return response()->json(['success' => true, 'order' => $order], 201);
     }
+
+
 
     /**
      * Update an existing order.

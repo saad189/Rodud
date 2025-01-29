@@ -8,7 +8,7 @@ import 'react-native-reanimated';
 import { RootSiblingParent } from 'react-native-root-siblings';
 import { useColorScheme } from '@/hooks/useColorScheme';
 
-import { LoaderProvider } from '@/hooks';
+import { LoaderProvider, ToastProvider } from '@/hooks';
 import { ROUTE_NAMES } from '@/constants';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -68,11 +68,13 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <RootSiblingParent>
-        <LoaderProvider>
-          <Stacks />
-        </LoaderProvider>
-      </RootSiblingParent>
+      <ToastProvider>
+        <RootSiblingParent>
+          <LoaderProvider>
+            <Stacks />
+          </LoaderProvider>
+        </RootSiblingParent>
+      </ToastProvider>
       <StatusBar style="auto" />
     </ThemeProvider>
   );
