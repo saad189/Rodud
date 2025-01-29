@@ -44,4 +44,9 @@ class ShippingOrder extends Model
         'status' => 'string',
         'size' => 'string',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(\App\Models\User::class);
+    }
 }
