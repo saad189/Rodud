@@ -14,7 +14,7 @@
     <script>
         async function updateStatus(orderId) {
             const status = document.getElementById(`status-${orderId}`).value;
-            const response = await fetch(`/admin/orders/${orderId}/update-status`, {
+            const response = await fetch(`/api/admin/orders/${orderId}/update-status`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

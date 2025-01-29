@@ -8,11 +8,6 @@ use Illuminate\Support\Facades\Log;
 
 class AdminController extends Controller
 {
-    public function index()
-    {
-        // This could redirect to the login form or handle an admin "home" page
-        return redirect()->route('admin.loginForm');
-    }
 
     public function dashboard()
     {
