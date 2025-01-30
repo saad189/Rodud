@@ -55,3 +55,59 @@ php artisan passport:install
 
 # Start the Laravel server
 php artisan serve
+
+# Environment Variables
+DB_CONNECTION=mysql
+DB_HOST=localhost
+DB_PORT=3306
+DB_USERNAME=name
+DB_PASSWORD=pass
+DB_DATABASE=roduddb
+
+SESSION_DOMAIN=192.168.1.9
+SANCTUM_STATEFUL_DOMAINS=192.168.1.9
+
+(I used Gmail)
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USERNAME=mail
+MAIL_PASSWORD=pass
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS=mail
+MAIL_FROM_NAME="Truck Ordering App"
+
+# Access Admin Panel: url/admin/login (http://127.0.0.1:8000/admin/login)
+
+#### Front-end (React Native)
+
+# Navigate to mobile directory
+cd ordertrackingapp
+
+# Install dependencies
+npm install
+
+# Start Expo
+npx expo start
+or
+npx expo run:android (not tested on iOs)
+
+
+#### Screenshots
+
+#Admin Panel
+
+![image](https://github.com/user-attachments/assets/59d0c5ac-9a4d-4377-89e4-8a870eb04857)
+
+#Mobile App
+
+![image](https://github.com/user-attachments/assets/8231ff0f-510d-4c61-887a-b558482c8777)
+
+
+
+
+
+
+
+
+
