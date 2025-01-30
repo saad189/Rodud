@@ -36,17 +36,25 @@
 
 <body class="bg-gray-100 text-gray-900">
 
-    <!-- HEADER / BANNER -->
     <header class="bg-white shadow p-4 flex justify-between items-center">
         <!-- Left: Logged-in user name -->
         <div class="text-xl font-bold">
-            @if(session('logged_in_user'))
-            Hello, {{ session('logged_in_user')['name'] }}
+            @if($user)
+            Hello, {{ $user['name'] }}
             @else
             Admin Dashboard
             @endif
         </div>
+
+        <!-- Right: Logout Button -->
+        <form action="/logout" method="POST">
+            @csrf
+            <button type="submit" class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
+                Logout
+            </button>
+        </form>
     </header>
+
 
     <!-- MAIN CONTENT -->
     <div class="container mx-auto my-10 p-6 bg-white rounded-lg shadow-md">

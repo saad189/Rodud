@@ -9,7 +9,7 @@ class AdminController extends Controller
 {
     public function dashboard()
     {
-        $user = session('logged_in_user');
+        $user = auth()->guard('web')->user();
 
         if (!$user) {
             return redirect()->route('login')->with('error', 'Please log in first.');
