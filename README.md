@@ -92,7 +92,7 @@ npx expo start
 or
 npx expo run:android (not tested on iOs)
 
-
+```
 #### Screenshots
 
 #Admin Panel
