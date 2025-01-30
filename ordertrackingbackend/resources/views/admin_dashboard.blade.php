@@ -27,7 +27,8 @@
 
             const result = await response.json();
             if (result.success) {
-                alert("Order status updated successfully!");
+                alert("Order status updated successfully!")
+                location.reload();
             } else {
                 alert("Failed to update order status.");
             }
@@ -41,12 +42,13 @@
     <header class="bg-white shadow p-4 flex justify-between items-center">
         <!-- Left: Logged-in user name -->
         <div class="text-xl font-bold">
-            @if(Auth::check())
-            Hello, {{ Auth::user()->name }}
+            @if(session('logged_in_user'))
+            Hello, {{ session('logged_in_user')['name'] }}
             @else
             Admin Dashboard
             @endif
         </div>
+
 
         <!-- Right: Notifications Icon / Dropdown -->
         <div class="relative" x-data="{ open: false }">

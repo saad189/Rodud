@@ -8,10 +8,14 @@ use Illuminate\Support\Facades\Log;
 
 class AdminController extends Controller
 {
-
     public function dashboard()
     {
-        Log::info('Admin dashboard accessed');
+        $user = session('logged_in_user');
+
+        if (!$user) {
+            return redirect()->route('login')->with('error', 'Please log in first.');
+        }
+
         $orders = ShippingOrder::with('user')->get();
         $notifications = [
             ['message' => 'Order #123 has been updated.'],
@@ -19,7 +23,7 @@ class AdminController extends Controller
             ['message' => 'Server backup completed.'],
         ];
 
-        return view('admin_dashboard', compact('orders', 'notifications'));
+        return view('admin_dashboard', compact('user', 'orders', 'notifications'));
     }
 
     public function updateOrderStatus(Request $request, $id)

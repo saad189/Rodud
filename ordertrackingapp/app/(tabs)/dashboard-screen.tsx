@@ -32,10 +32,9 @@ const OrderDashboardScreen = () => {
         });
         setCurrentDate(formattedDate);
 
-        // Calculate completed orders
         const completed = orders.filter((order) => order.status == OrderStatus.Delivered).length;
         setCompletedorders(completed);
-    }, []);
+    }, [orders]);
 
     useFocusEffect(
         useCallback(() => {
