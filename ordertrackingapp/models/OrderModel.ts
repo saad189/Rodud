@@ -1,11 +1,11 @@
 import { OrderStatus, PackageSize } from "@/constants";
 
 export interface OrderModel {
-    orderNumber: string;
-    pickupLocation: string;
-    shippingLocation: string;
-    pickupDate: Date;
-    deliveryDate: Date;
+    order_number: string;
+    pickup_location: string;
+    shipping_location: string;
+    pickup_date: Date;
+    delivery_date: Date;
     status: OrderStatus;
     comments?: string;
     size: PackageSize;
@@ -13,10 +13,10 @@ export interface OrderModel {
 }
 
 export interface CreateOrderModel {
-    pickupLocation: string;
-    shippingLocation: string;
-    pickupDate: Date;
-    deliveryDate: Date;
+    pickup_location: string;
+    shipping_location: string;
+    pickup_date: Date;
+    delivery_date: Date;
     comments?: string;
     size: PackageSize;
     weight: number;

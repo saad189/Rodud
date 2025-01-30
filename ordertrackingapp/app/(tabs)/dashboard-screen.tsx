@@ -32,10 +32,9 @@ const OrderDashboardScreen = () => {
         });
         setCurrentDate(formattedDate);
 
-        // Calculate completed orders
         const completed = orders.filter((order) => order.status == OrderStatus.Delivered).length;
         setCompletedorders(completed);
-    }, []);
+    }, [orders]);
 
     useFocusEffect(
         useCallback(() => {
@@ -73,7 +72,7 @@ const OrderDashboardScreen = () => {
             <FlatList
                 style={styles.list}
                 data={orders}
-                keyExtractor={(item) => item.orderNumber}
+                keyExtractor={(item) => item.order_number}
                 renderItem={({ item }) => (
                     <TouchableOpacity style={styles.card}>
                         <Text style={[styles.statusBubble, { backgroundColor: statusColors[item.status] }]}>
@@ -82,17 +81,17 @@ const OrderDashboardScreen = () => {
 
                         <View style={styles.row}>
                             <Text style={styles.label}>Order ID:</Text>
-                            <Text style={styles.value}>{item.orderNumber}</Text>
+                            <Text style={styles.value}>{item.order_number}</Text>
                         </View>
 
                         <View style={styles.row}>
                             <Text style={styles.label}>Pickup:</Text>
-                            <Text style={styles.value}>{formatDateToDDMMYYYY(item.pickupDate)}</Text>
+                            <Text style={styles.value}>{formatDateToDDMMYYYY(item.pickup_date)}</Text>
                         </View>
 
                         <View style={styles.row}>
                             <Text style={styles.label}>Delivery:</Text>
-                            <Text style={styles.value}>{formatDateToDDMMYYYY(item.deliveryDate)}</Text>
+                            <Text style={styles.value}>{formatDateToDDMMYYYY(item.delivery_date)}</Text>
                         </View>
                     </TouchableOpacity>
                 )}

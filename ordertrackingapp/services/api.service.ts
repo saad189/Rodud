@@ -9,6 +9,8 @@ const BASE_URL = config.apiUrl;
 const apiClient = axios.create({
     baseURL: BASE_URL,
     timeout: 10000,
+    withCredentials: true,
+    //  withXSRFToken: true,
 });
 
 // Request interceptor to add the Authorization header
@@ -44,7 +46,6 @@ apiClient.interceptors.response.use(
             console.log('Error message:', error.message);
             error.message = 'Something went wrong'
         }
-
 
         return Promise.reject(error);
     }

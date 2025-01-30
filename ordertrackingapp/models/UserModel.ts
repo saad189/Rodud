@@ -11,7 +11,7 @@ export interface LoginInfo {
 }
 
 export interface SignUpInfo extends LoginInfo {
-    repeatedPassword: string;
+    repeated_password: string;
     name: string;
 }
 

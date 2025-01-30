@@ -26,7 +26,7 @@ export default function RegisterScreen() {
     const [name, setName] = useState<{ value: string; error: string }>({ value: '', error: '' });
     const [email, setEmail] = useState<{ value: string; error: string }>({ value: '', error: '' });
     const [password, setPassword] = useState<{ value: string; error: string }>({ value: '', error: '' });
-    const [repeatedPassword, setRepeatedPassword] = useState<{ value: string; error: string }>({ value: '', error: '' });
+    const [repeated_password, setrepeated_password] = useState<{ value: string; error: string }>({ value: '', error: '' });
 
 
     // manage repeat password as well
@@ -40,7 +40,7 @@ export default function RegisterScreen() {
             setName({ ...name, error: nameError });
             setEmail({ ...email, error: emailError });
             setPassword({ ...password, error: passwordError });
-            setRepeatedPassword({ ...repeatedPassword, error: passwordError });
+            setrepeated_password({ ...repeated_password, error: passwordError });
             return;
         }
 
@@ -48,7 +48,7 @@ export default function RegisterScreen() {
             const signupInfo = {
                 email: email.value, password: password.value,
                 name: name.value.trim(),
-                repeatedPassword: repeatedPassword.value
+                repeated_password: repeated_password.value
             };
             Keyboard.dismiss();
             setLoading(true);
@@ -95,8 +95,8 @@ export default function RegisterScreen() {
 
             <PasswordField
                 placeholder="Repeat Password"
-                value={repeatedPassword.value}
-                onChangeText={(text: any) => setRepeatedPassword({ value: text, error: '' })}
+                value={repeated_password.value}
+                onChangeText={(text: any) => setrepeated_password({ value: text, error: '' })}
                 onSubmitEditing={onSignUpPressed} label='Repeat Password' />
             <Button mode="contained" onPress={onSignUpPressed} style={styles.button}>
                 Sign Up
