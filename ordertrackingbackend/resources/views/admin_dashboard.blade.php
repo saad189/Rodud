@@ -7,14 +7,12 @@
     <title>Admin Orders</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Alpine.js (optional, for the notification dropdown) -->
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <script>
         async function updateStatus(orderId) {
             const status = document.getElementById(`status-${orderId}`).value;
-            const response = await fetch(`/api/admin/orders/${orderId}/update-status`, {
+            const response = await fetch(`/admin/orders/${orderId}/update-status`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -47,43 +45,6 @@
             @else
             Admin Dashboard
             @endif
-        </div>
-
-
-        <!-- Right: Notifications Icon / Dropdown -->
-        <div class="relative" x-data="{ open: false }">
-            <button @click="open = !open" class="relative">
-                <!-- Bell icon -->
-                <svg class="w-6 h-6 text-gray-600 hover:text-gray-800 transition" fill="none" stroke="currentColor"
-                    stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14V11a6 6 0 00-5-5.916V4a1 1 0 00-2 0v1.084A6 6 0 006 11v3c0 .528-.214 1.04-.595 1.405L4 17h5m6 0a3 3 0 11-6 0h6z">
-                    </path>
-                </svg>
-                <!-- Example: If you wanted to show a "badge" for new notifications -->
-                <!--
-                <span class="absolute top-0 right-0 inline-flex items-center
-                             justify-center px-2 py-1 text-xs font-bold leading-none
-                             text-red-100 bg-red-600 rounded-full">3</span>
-                -->
-            </button>
-
-            <!-- Dropdown -->
-            <div x-show="open" @click.away="open = false"
-                class="origin-top-right absolute right-0 mt-2 w-64 bg-white border border-gray-200 rounded shadow-md p-2">
-                <h2 class="font-semibold mb-2">Notifications</h2>
-                <ul class="space-y-1">
-                    @if(isset($notifications) && count($notifications) > 0)
-                    @foreach($notifications as $note)
-                    <li class="px-3 py-1 hover:bg-gray-100 rounded cursor-pointer">
-                        {{ $note['message'] }}
-                    </li>
-                    @endforeach
-                    @else
-                    <li class="px-3 py-1 text-gray-500">No notifications.</li>
-                    @endif
-                </ul>
-            </div>
         </div>
     </header>
 

@@ -29,9 +29,3 @@ Route::middleware($middlewares)->group(function () {
     Route::post('/shipping-orders', [ShippingOrderController::class, 'addOrder']); // Add a new order
     Route::put('/shipping-orders/{id}', [ShippingOrderController::class, 'updateOrder']); // Update an existing order
 });
-
-
-Route::middleware(['auth'])->group(function () {
-    Route::post('/admin/orders/{id}/update-status', [AdminController::class, 'updateOrderStatus'])
-        ->name('admin.updateOrderStatus');
-});

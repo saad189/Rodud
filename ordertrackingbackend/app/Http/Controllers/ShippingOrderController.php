@@ -4,12 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\ShippingOrder;
 use Illuminate\Http\Request;
+use App\Models\User;
+use App\Notifications\NewOrderNotification;
 
 class ShippingOrderController extends Controller
 {
-
     /**
-     * get all orders
+     * Get all orders.
      */
     public function getAllOrders()
     {
@@ -52,12 +53,26 @@ class ShippingOrderController extends Controller
         ]));
 
         // Generate and update order_number based on user_id and order_id
-        $order->order_number = "u{$userId}o{$order->id}";
+        $order->order_number = $this->generateOrderNumber($userId, $order->id);
         $order->save(); // Save the updated order_number
+
+        $this->sendNotification($order);
 
         return response()->json(['success' => true, 'order' => $order], 201);
     }
 
+    private function generateOrderNumber($userId, $orderId)
+    {
+        return "u{$userId}o{$orderId}";
+    }
+
+    private function sendNotification($order)
+    {
+        $admins = User::where('is_admin', 1)->get();
+        foreach ($admins as $admin) {
+            $admin->notify(new NewOrderNotification($order, $admin));
+        }
+    }
 
 
     /**

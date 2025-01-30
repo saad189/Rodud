@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\ShippingOrder;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class AdminController extends Controller
 {
@@ -17,13 +16,8 @@ class AdminController extends Controller
         }
 
         $orders = ShippingOrder::with('user')->get();
-        $notifications = [
-            ['message' => 'Order #123 has been updated.'],
-            ['message' => '3 new users registered today.'],
-            ['message' => 'Server backup completed.'],
-        ];
 
-        return view('admin_dashboard', compact('user', 'orders', 'notifications'));
+        return view('admin_dashboard', compact('user', 'orders'));
     }
 
     public function updateOrderStatus(Request $request, $id)
